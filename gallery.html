@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+      .blurred {
+        filter: blur(10px);
+        pointer-events: none;
+      }
+      .semi-visible {
+        opacity: 0.7;
+      }
+      .card-img-top {
+        width: 100%;
+        height: auto;
+      }
+      .load-more-btn {
+        display: block;
+        margin: 20px auto;
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      .load-more-btn:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+<body>
+  <!-- Horizontal Navbar -->
+  <div class="horizonal-navbar">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+      <div class="container-fluid">
+        <a class="navbar-brand text-primary" href="index.html">Image Detection</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link text-primary" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-primary" href="about.html">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-primary" href="gallery.html">Gallery</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-primary" href="contact.html">Contact Us</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Gallery Section -->
+  <section class="gallery-section py-5">
+    <div class="container">
+      <h2 class="text-center mb-4">Image Gallery</h2>
+      <div class="row g-4" id="gallery-container">
+        <!-- Image 1 -->
+        <div class="col-md-4">
+          <div class="card">
+            <img src="https://picsum.photos/400/300?random=1" class="card-img-top" alt="Sample Image 1">
+            <div class="card-body">
+              <p class="card-text">Sample description for the first image. This image relates to content moderation.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Image 2 (Blurred) -->
+        <div class="col-md-4">
+          <div class="card">
+            <img src="https://picsum.photos/400/300?random=2" class="card-img-top blurred" alt="Sensitive Image 2">
+            <div class="card-body">
+              <p class="card-text">Sensitive content blurred for safety.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Image 3 (Semi-visible) -->
+        <div class="col-md-4">
+          <div class="card">
+            <img src="https://picsum.photos/400/300?random=3" class="card-img-top semi-visible" alt="Sample Image 3">
+            <div class="card-body">
+              <p class="card-text">Sample description for the third image. Displayed at 70% visibility.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Image 4 -->
+        <div class="col-md-4">
+          <div class="card">
+            <img src="https://picsum.photos/400/300?random=4" class="card-img-top" alt="Sample Image 4">
+            <div class="card-body">
+              <p class="card-text">Example of harmful meme detection and prevention techniques.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Image 5 (Blurred) -->
+        <div class="col-md-4">
+          <div class="card">
+            <img src="https://picsum.photos/400/300?random=5" class="card-img-top blurred" alt="Sensitive Image 5">
+            <div class="card-body">
+              <p class="card-text">Sensitive content blurred for safety.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Image 6 (Semi-visible) -->
+        <div class="col-md-4">
+          <div class="card">
+            <img src="https://picsum.photos/400/300?random=6" class="card-img-top semi-visible" alt="Sample Image 6">
+            <div class="card-body">
+              <p class="card-text">Visual representation of how harmful memes impact digital culture.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="load-more-btn" id="load-more-btn">Load More</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer bg-dark text-white text-center py-3">
+    <p>&copy; 2024 Image Detection. All Rights Reserved. | Designed with ❤️ by the Team</p>
+  </footer>
+
+  <script>
+    const galleryContainer = document.getElementById('gallery-container');
+    const loadMoreBtn = document.getElementById('load-more-btn');
+  
+    // Generate an array of 60 images dynamically
+    const images = Array.from({ length: 60 }, (_, index) => ({
+      src: `https://picsum.photos/400/300?random=${index + 7}`,
+      alt: `Sample Image ${index + 7}`,
+      description: `Description for image ${index + 7}.`,
+      type: ['clean','blurred', 'semi-visible'][index % 3] // Cycles through image types
+    }));
+  
+    let currentIndex = 0; // Tracks the current image index
+    const imagesPerClick = 3; // Number of images to load per click
+  
+    loadMoreBtn.addEventListener('click', () => {
+      if (currentIndex < images.length) {
+        const imagesToLoad = images.slice(currentIndex, currentIndex + imagesPerClick);
+        imagesToLoad.forEach(image => {
+          const col = document.createElement('div');
+          col.className = 'col-md-4';
+          col.innerHTML = `
+            <div class="card">
+              <img src="${image.src}" class="card-img-top ${image.type}" alt="${image.alt}">
+              <div class="card-body">
+                <p class="card-text">${image.description}</p>
+              </div>
+            </div>
+          `;
+          galleryContainer.appendChild(col);
+        });
+  
+        currentIndex += imagesToLoad.length;
+  
+        // Hide the button if all images are loaded
+        if (currentIndex >= images.length) {
+          loadMoreBtn.style.display = 'none';
+        }
+      }
+    });
+  </script>
+  
+  
+  
+  
+  
+  
+</body>
+</html>
